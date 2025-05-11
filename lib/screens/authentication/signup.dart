@@ -115,22 +115,25 @@ class _SignupState extends State<Signup> {
               ),
               SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () async {
-                  await authController.signup(
-                    emailController.text.trim(),
-                    passwordController.text.trim(),
-                  );
-                  if (authController.isLoggedIn.value) {
-                    Get.offNamed(AppRoutes.LOGIN);
-                  } else {
-                    Get.snackbar(
-                      'Signup Failed',
-                      authController.errorMessage.value,
-                      backgroundColor: Colors.redAccent,
-                      colorText: Colors.white,
-                      snackPosition: SnackPosition.BOTTOM,
-                    );
-                  }
+                // onPressed: () async {
+                //   await authController.signup(
+                //     emailController.text.trim(),
+                //     passwordController.text.trim(),
+                //   );
+                //   if (authController.isLoggedIn.value) {
+                //     Get.offNamed(AppRoutes.LOGIN);
+                //   } else {
+                //     Get.snackbar(
+                //       'Signup Failed',
+                //       authController.errorMessage.value,
+                //       backgroundColor: Colors.redAccent,
+                //       colorText: Colors.white,
+                //       snackPosition: SnackPosition.BOTTOM,
+                //     );
+                //   }
+                // },
+                onPressed: () {
+                  Get.offNamed(AppRoutes.UPLOAD_RESUME);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
