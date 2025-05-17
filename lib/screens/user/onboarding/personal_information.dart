@@ -12,79 +12,11 @@ class PersonalInformation extends StatefulWidget {
   State<PersonalInformation> createState() => _PersonalInformationState();
 }
 
-final TextEditingController nameController = TextEditingController();
-final TextEditingController emailController = TextEditingController();
-final TextEditingController phoneController = TextEditingController();
-CommonWidgets commonWidgets = CommonWidgets();
-OnboardingController onboardingController = OnboardingController();
-
 class _PersonalInformationState extends State<PersonalInformation> {
-  String? selectedGender;
-  String? selectedState;
-  String? selectedCity;
-
-  List<Map<String, String>> states = [];
-  List<String> cities = [];
-
-  Dio dio = Dio();
-
-  @override
-  void initState() {
-    super.initState();
-    fetchStates();
-  }
-
-  Future<void> fetchStates() async {
-    try {
-      final response = await dio.get(
-        'https://your-api-base-url.com/api/onboarding/states',
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          states = List<Map<String, String>>.from(
-            response.data.map<Map<String, String>>(
-              (state) => {
-                "name": state["name"].toString(),
-                "code": state["isoCode"].toString(),
-              },
-            ),
-          );
-        });
-      } else {
-        print('Failed to load states');
-      }
-    } catch (e) {
-      print('Error fetching states: $e');
-    }
-  }
-
-  Future<void> fetchCities(String stateName) async {
-    try {
-      // Find the ISO code for the selected state name
-      final selected = states.firstWhere(
-        (s) => s["name"] == stateName,
-        orElse: () => {},
-      );
-
-      final stateCode = selected["code"];
-      if (stateCode == null || stateCode.isEmpty) return;
-
-      final response = await dio.get(
-        'https://your-api-base-url.com/api/onboarding/$stateCode/cities',
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          cities = List<String>.from(response.data.map((city) => city['name']));
-        });
-      } else {
-        print('Failed to load cities');
-      }
-    } catch (e) {
-      print('Error fetching cities: $e');
-    }
-  }
+  int currentPage = 0;
+  CommonWidgets commonWidgets = CommonWidgets();
+  final OnboardingController onboardingController =
+      Get.find<OnboardingController>();
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +28,8 @@ class _PersonalInformationState extends State<PersonalInformation> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              commonWidgets.buildProgress(currentPage: currentPage),
+              SizedBox(height: 20),
               commonWidgets.buildHeader(
                 title: 'Personal Information',
                 subtitle:
@@ -106,52 +40,54 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 title: 'Name',
                 hint: 'Akhil Sharma',
                 keyboardinput: TextInputType.text,
-                controller: nameController,
+                controller: onboardingController.nameController,
               ),
               const SizedBox(height: 20),
               commonWidgets.buildTextEntires(
                 title: 'Email',
                 hint: 'akhil.sharma@gmail.com',
                 keyboardinput: TextInputType.emailAddress,
-                controller: emailController,
+                controller: onboardingController.emailController,
               ),
               const SizedBox(height: 20),
               commonWidgets.buildTextEntires(
                 title: 'Phone Number',
                 hint: '921XXXX123',
                 keyboardinput: TextInputType.phone,
-                controller: phoneController,
+                controller: onboardingController.phoneController,
               ),
               const SizedBox(height: 20),
               commonWidgets.buildGenderDropdown(
-                selectedGender: selectedGender,
-                onChanged: (value) {
-                  setState(() {
-                    selectedGender = value;
-                  });
+                selectedGender: onboardingController.gender.value,
+                onChanged: (newValue) {
+                  onboardingController.gender.value = newValue!;
                 },
               ),
               const SizedBox(height: 20),
-              commonWidgets.buildStateDropdown(
-                selectedState: selectedState,
-                states: states,
-                onChanged: (state) {
-                  setState(() {
-                    selectedState = state;
-                    selectedCity = null;
-                  });
-                  if (state != null) fetchCities(state);
-                },
+
+              /// States dropdown wrapped in Obx
+              Obx(
+                () => commonWidgets.buildStateDropdown(
+                  selectedState: onboardingController.state.value,
+                  states: onboardingController.states,
+                  onChanged: (newState) {
+                    onboardingController.state.value = newState!;
+                    onboardingController.city.value = null;
+                    onboardingController.fetchCities(newState);
+                  },
+                ),
               ),
               const SizedBox(height: 20),
-              commonWidgets.buildCityDropdown(
-                selectedCity: selectedCity,
-                cities: cities,
-                onChanged: (city) {
-                  setState(() {
-                    selectedCity = city;
-                  });
-                },
+
+              /// Cities dropdown wrapped in Obx
+              Obx(
+                () => commonWidgets.buildCityDropdown(
+                  selectedCity: onboardingController.city.value,
+                  cities: onboardingController.cities,
+                  onChanged: (newCity) {
+                    onboardingController.city.value = newCity!;
+                  },
+                ),
               ),
               const SizedBox(height: 30),
               commonWidgets.buildButton(
@@ -161,35 +97,30 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 height: 44,
                 width: 317,
                 onPressed: () {
-                  final name = nameController.text.trim();
-                  final email = emailController.text.trim();
-                  final phone = phoneController.text.trim();
-                  final gender = selectedGender ?? '';
-                  final state = selectedState ?? '';
-                  final city = selectedCity ?? '';
+                  final name = onboardingController.nameController.text.trim();
+                  final email =
+                      onboardingController.emailController.text.trim();
+                  final phone =
+                      onboardingController.phoneController.text.trim();
+                  final gender = onboardingController.gender.value;
+                  final state = onboardingController.state.value;
+                  final city = onboardingController.city.value;
 
                   // if (name.isEmpty ||
                   //     email.isEmpty ||
                   //     phone.isEmpty ||
-                  //     gender.isEmpty ||
-                  //     state.isEmpty ||
-                  //     city.isEmpty) {
+                  //     gender == null ||
+                  //     state == null ||
+                  //     city == null) {
                   //   Get.snackbar(
                   //     'Missing Information',
-                  //     'Please fill all fields before continuing.',
+                  //     'Please fill all fields before Saving.',
                   //     snackPosition: SnackPosition.BOTTOM,
                   //     backgroundColor: Colors.redAccent,
                   //     colorText: Colors.white,
                   //   );
                   //   return;
                   // }
-
-                  onboardingController.name.value = name;
-                  onboardingController.email.value = email;
-                  onboardingController.phone.value = phone;
-                  onboardingController.gender.value = gender;
-                  onboardingController.state.value = state;
-                  onboardingController.city.value = city;
 
                   Get.toNamed(AppRoutes.PROFESSIONAL_SUMMARY);
                   //print('$name, $email, $phone, $gender, $state, $city');

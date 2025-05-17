@@ -1,18 +1,20 @@
 class Experience {
-  late String jobTitle;
-  late String hospital;
-  late String location;
-  late String startDate;
-  late String endDate;
-  late String description;
+  String? jobTitle;
+  String? hospital;
+  String? location;
+  String? startDate;
+  String? endDate;
+  String? description;
+  bool currentlyWorking;
 
   Experience({
-    required this.jobTitle,
-    required this.hospital,
-    required this.location,
-    required this.startDate,
-    required this.endDate,
-    required this.description,
+    this.jobTitle,
+    this.hospital,
+    this.location,
+    this.startDate,
+    this.endDate,
+    this.description,
+    this.currentlyWorking = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -22,5 +24,6 @@ class Experience {
     "startDate": startDate,
     "endDate": endDate,
     "description": description,
+    "currentlyWorking": currentlyWorking,
   };
 }
