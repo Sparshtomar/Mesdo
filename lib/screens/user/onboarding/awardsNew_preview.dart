@@ -158,6 +158,8 @@ class _AwardsnewPreviewState extends State<AwardsnewPreview> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              commonWidgets.buildSkipper(),
             ],
           ),
         ),

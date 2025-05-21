@@ -97,12 +97,14 @@ class _SkillsState extends State<Skills> {
                     height: 44,
                     width: 140,
                     onPressed: () {
-                      // Data already in controller.skillsList
+                      // Data already in controller.skills
                       Get.toNamed(AppRoutes.INTEREST);
                     },
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              commonWidgets.buildSkipper(),
             ],
           ),
         ),

@@ -1,11 +1,39 @@
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:mesdo/controller/onBoarding_controller.dart';
+import 'package:mesdo/routes/app_routes.dart';
 
 class CommonWidgets {
+  Widget buildSkipper() {
+    return Center(
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text:
+                  'We recommed you to fill all the information for better experience. But you can ',
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
+            TextSpan(
+              text: 'skip to end ->',
+              style: TextStyle(color: Colors.blue, fontSize: 12),
+              recognizer:
+                  TapGestureRecognizer()
+                    ..onTap = () {
+                      Get.toNamed(AppRoutes.INTEREST);
+                    },
+            ),
+          ],
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   Widget buildSkillInputChips({
     required TextEditingController controller,
     required List<String> skills,
@@ -172,7 +200,7 @@ class CommonWidgets {
 
   Widget buildProgress({required int currentPage}) {
     return LinearProgressIndicator(
-      value: currentPage / 7,
+      value: currentPage / 6,
       minHeight: 7,
       backgroundColor: Colors.grey[300],
       valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),

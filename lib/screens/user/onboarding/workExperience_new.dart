@@ -295,6 +295,8 @@ class _WorkexperienceNewState extends State<WorkexperienceNew> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              commonWidgets.buildSkipper(),
             ],
           ),
         ),

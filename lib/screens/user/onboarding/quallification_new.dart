@@ -249,6 +249,8 @@ class _QuallificationNewState extends State<QuallificationNew> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              commonWidgets.buildSkipper(),
             ],
           ),
         ),

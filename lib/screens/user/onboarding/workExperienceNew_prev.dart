@@ -158,6 +158,8 @@ class _WorkexperiencenewPrevState extends State<WorkexperiencenewPrev> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              commonWidgets.buildSkipper(),
             ],
           ),
         ),

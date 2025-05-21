@@ -76,6 +76,8 @@ class _ProfessionalSummaryState extends State<ProfessionalSummary> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              commonWidgets.buildSkipper(),
             ],
           ),
         ),

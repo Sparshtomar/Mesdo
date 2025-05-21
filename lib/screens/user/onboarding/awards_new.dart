@@ -178,6 +178,8 @@ class _AwardsNewState extends State<AwardsNew> {
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+              commonWidgets.buildSkipper(),
             ],
           ),
         ),

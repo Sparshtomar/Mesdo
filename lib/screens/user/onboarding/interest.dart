@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mesdo/controller/onBoarding_controller.dart';
 import 'package:mesdo/routes/app_routes.dart';
 import 'package:mesdo/screens/user/onboarding/common_widgets.dart';
-import 'package:mesdo/screens/user/onboarding/personal_information.dart';
 import 'package:get/get.dart';
 
 class Interest extends StatefulWidget {
@@ -28,6 +27,7 @@ class _InterestState extends State<Interest> {
     selectedInterests = List<String>.from(onboardingController.interests);
   }
 
+  int currentPage = 6;
   List<String> selectedInterests = [];
   final OnboardingController onboardingController =
       Get.find<OnboardingController>();
@@ -52,6 +52,8 @@ class _InterestState extends State<Interest> {
           padding: EdgeInsets.fromLTRB(30, 50, 30, 30),
           child: Column(
             children: [
+              commonWidgets.buildProgress(currentPage: currentPage),
+              const SizedBox(height: 20),
               commonWidgets.buildHeader(
                 title: 'What are you interested in ?',
                 subtitle: 'Choose 3 or more',
