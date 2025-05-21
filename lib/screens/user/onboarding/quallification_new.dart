@@ -34,7 +34,7 @@ class _QuallificationNewState extends State<QuallificationNew> {
     super.initState();
 
     // If editing, fill data
-    final index = controller.editingIndex.value;
+    final index = controller.editingIndexQualification.value;
     if (index != null && index < controller.qualifications.length) {
       final q = controller.qualifications[index];
       qualification = q.qualification;
@@ -47,7 +47,7 @@ class _QuallificationNewState extends State<QuallificationNew> {
       skills = q.skills;
       skillsController = TextEditingController();
     } else {
-      controller.editingIndex.value = null; // reset stale index
+      controller.editingIndexQualification.value = null; // reset stale index
       qualification = null;
       university = null;
       course = null;
@@ -71,7 +71,7 @@ class _QuallificationNewState extends State<QuallificationNew> {
       description: descriptionController.text.trim(),
     );
 
-    if (controller.editingIndex.value != null) {
+    if (controller.editingIndexQualification.value != null) {
       controller.updateQualification(qualificationObj);
     } else {
       controller.addQualification(qualificationObj);
@@ -207,6 +207,8 @@ class _QuallificationNewState extends State<QuallificationNew> {
                       specialization == null ||
                       courseType == null ||
                       passingYear == null ||
+                      // skills.isEmpty ||
+                      // skillsController.text.trim().isEmpty ||
                       descriptionController.text.trim().isEmpty) {
                     Get.snackbar(
                       'Missing Information',

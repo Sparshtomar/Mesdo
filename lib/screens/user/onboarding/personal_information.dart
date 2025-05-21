@@ -57,12 +57,20 @@ class _PersonalInformationState extends State<PersonalInformation> {
                 controller: onboardingController.phoneController,
               ),
               const SizedBox(height: 20),
-              commonWidgets.buildGenderDropdown(
-                selectedGender: onboardingController.gender.value,
-                onChanged: (newValue) {
-                  onboardingController.gender.value = newValue!;
-                },
+              Obx(
+                () => commonWidgets.buildGenderDropdown(
+                  selectedGender:
+                      onboardingController.gender.value == null ||
+                              onboardingController.gender.value!.isEmpty
+                          ? null
+                          : onboardingController.gender.value,
+
+                  onChanged: (newValue) {
+                    onboardingController.gender.value = newValue ?? '';
+                  },
+                ),
               ),
+
               const SizedBox(height: 20),
 
               /// States dropdown wrapped in Obx
@@ -123,7 +131,6 @@ class _PersonalInformationState extends State<PersonalInformation> {
                   // }
 
                   Get.toNamed(AppRoutes.PROFESSIONAL_SUMMARY);
-                  //print('$name, $email, $phone, $gender, $state, $city');
                 },
               ),
             ],

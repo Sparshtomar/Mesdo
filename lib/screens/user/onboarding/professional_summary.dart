@@ -54,16 +54,16 @@ class _ProfessionalSummaryState extends State<ProfessionalSummary> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   commonWidgets.buildButton(
-                    text: 'skip',
+                    text: 'Previous',
                     backgroundColor: Colors.grey[200]!,
-                    textColor: Colors.blue,
+                    textColor: Colors.grey,
                     height: 44,
                     width: 140,
                     onPressed: () {
-                      Get.toNamed(AppRoutes.QUALIFICATION_NEW);
+                      Get.back();
                     },
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 20),
                   commonWidgets.buildButton(
                     text: 'Continue',
                     backgroundColor: Colors.blue,

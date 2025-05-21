@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mesdo/controller/onBoarding_controller.dart';
 import 'package:mesdo/routes/app_routes.dart';
@@ -23,14 +25,7 @@ class _InterestState extends State<Interest> {
   @override
   void initState() {
     super.initState();
-    // Load previously selected interests
     selectedInterests = List<String>.from(onboardingController.interests);
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   var result = await Get.to(() => WorkExpPreview());
-    //   if (result == 'goToWorkExperience') {
-    //      Get.back(result: 'goToWorkExperience');
-    //   }
-    // });
   }
 
   List<String> selectedInterests = [];
@@ -68,7 +63,7 @@ class _InterestState extends State<Interest> {
                 children:
                     allInterests.map((interest) {
                       final isSelected = selectedInterests.contains(interest);
-                      return ChoiceChip(
+                      return RawChip(
                         label: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -84,34 +79,61 @@ class _InterestState extends State<Interest> {
                           ],
                         ),
                         selected: isSelected,
+                        onSelected: (_) => toggleInterest(interest),
                         selectedColor: Colors.blue,
                         backgroundColor: Colors.grey[200],
                         labelStyle: TextStyle(
                           color: isSelected ? Colors.white : Colors.black,
                         ),
-                        onSelected: (_) => toggleInterest(interest),
+                        showCheckmark:
+                            false, // key line to disable default checkmark
                       );
                     }).toList(),
               ),
               const SizedBox(height: 20),
-              commonWidgets.buildButton(
-                text: 'Continue',
-                backgroundColor:
-                    selectedInterests.length >= 3
-                        ? Colors.blue
-                        : Colors.grey[300]!,
-                textColor:
-                    selectedInterests.length >= 3
-                        ? Colors.white
-                        : Colors.grey[500]!,
-                height: 44,
-                width: 317,
-                onPressed: () {
-                  if (selectedInterests.length >= 3) {
-                    onboardingController.interests.value = selectedInterests;
-                   // Get.toNamed(AppRoutes.WORK_EXP_PREVIEW);
-                  }
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  commonWidgets.buildButton(
+                    text: 'Previous',
+                    backgroundColor: Colors.grey[200]!,
+                    textColor: Colors.grey,
+                    height: 44,
+                    width: 140,
+                    onPressed: () {
+                      Get.back();
+                    },
+                  ),
+                  const SizedBox(width: 20),
+                  commonWidgets.buildButton(
+                    text: 'Continue',
+                    backgroundColor: Colors.blue,
+                    textColor: Colors.white,
+                    height: 44,
+                    width: 140,
+                    onPressed: () {
+                      if (selectedInterests.length < 3) {
+                        Get.snackbar(
+                          'Error Occured',
+                          'Choose at least 3 interests to continue',
+                        );
+                      } else {
+                        onboardingController.interests.assignAll(
+                          selectedInterests,
+                        );
+                        // Print all collected data
+                        debugPrint("------- Onboarding Data --------");
+                        debugPrint(
+                          JsonEncoder.withIndent(
+                            '  ',
+                          ).convert(onboardingController.toJson()),
+                          wrapWidth: 1024,
+                        );
+                        debugPrint("--------------------------------");
+                      }
+                    },
+                  ),
+                ],
               ),
             ],
           ),

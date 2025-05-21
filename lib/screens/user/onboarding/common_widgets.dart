@@ -51,7 +51,7 @@ class CommonWidgets {
                   controller.clear();
                 }
               },
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
             ),
           ],
         ),
@@ -61,9 +61,25 @@ class CommonWidgets {
           children:
               skills.map((skill) {
                 return Chip(
-                  label: Text(skill),
+                  label: Text(
+                    skill,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  deleteIcon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ), // make icon white
                   onDeleted: () => onDelete(skill),
-                  backgroundColor: Colors.grey[200],
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide.none, // removes border line completely
+                  ),
+                  elevation: 0,
+                  shadowColor: Colors.transparent,
+                  surfaceTintColor:
+                      Colors.transparent, // avoid unwanted overlays
+                  clipBehavior: Clip.antiAlias, // cleaner edges
                 );
               }).toList(),
         ),

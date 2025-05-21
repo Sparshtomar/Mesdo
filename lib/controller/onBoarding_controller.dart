@@ -24,16 +24,16 @@ class OnboardingController extends GetxController {
 
   var qualifications = <Qualifications>[].obs;
   var workExperience = <Experience>[].obs;
-  var Achievements = <Achievement>[].obs;
-
-  var currentPage = 0.obs;
-  var totalPage = 7;
+  var achievements = <Achievement>[].obs;
 
   // New reactive lists for states and cities
   var states = <Map<String, String>>[].obs;
   var cities = <String>[].obs;
 
-  var editingIndex = RxnInt(); // null means adding new, not editing
+  var editingIndexQualification = RxnInt(); // null means adding new, not editing
+  var editingIndexWork = RxnInt();
+  var editingIndexAwards = RxnInt();
+
   Dio dio = Dio();
 
   @override
@@ -94,9 +94,6 @@ class OnboardingController extends GetxController {
     }
   }
 
-  void setCurrentPage(int pageNumber) {
-    currentPage.value = pageNumber;
-  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -111,7 +108,7 @@ class OnboardingController extends GetxController {
       "aboutYou": aboutYouController.text.trim(),
       "qualifications": qualifications.map((q) => q.toJson()).toList(),
       "workExperience": workExperience.map((w) => w.toJson()).toList(),
-      "Achievements": Achievements.map((a) => a.toJson()).toList(),
+      "Achievements": achievements.map((a) => a.toJson()).toList(),
       "Skills": skills.toList(),
       "interest": interests.toList(),
     };
@@ -131,7 +128,7 @@ class OnboardingController extends GetxController {
     qualifications.value = [];
     workExperience.value = [];
     skills.value = [];
-    Achievements.value = [];
+    achievements.value = [];
     interests.value = [];
   }
 
@@ -144,13 +141,43 @@ class OnboardingController extends GetxController {
   }
 
   void updateQualification(Qualifications q) {
-    if (editingIndex.value != null) {
-      qualifications[editingIndex.value!] = q;
-      editingIndex.value = null;
+    if (editingIndexQualification.value != null) {
+      qualifications[editingIndexQualification.value!] = q;
+      editingIndexQualification.value = null;
     }
   }
 
   void deleteQualification(int index) {
     qualifications.removeAt(index);
+  }
+
+  void addWorkExperience(Experience e) {
+    workExperience.add(e);
+  }
+
+  void updateWorkExperience(Experience e) {
+    if (editingIndexWork.value != null) {
+      workExperience[editingIndexWork.value!] = e;
+      editingIndexWork.value = null;
+    }
+  }
+
+  void deleteWorkExperience(int indexWork) {
+    workExperience.removeAt(indexWork);
+  }
+
+  void addAwards(Achievement a) {
+    achievements.add(a);
+  }
+
+  void updateAwards(Achievement a) {
+    if (editingIndexAwards.value != null) {
+      achievements[editingIndexAwards.value!] = a;
+      editingIndexAwards.value = null;
+    }
+  }
+
+  void deleteAwards(int indexAward) {
+    achievements.removeAt(indexAward);
   }
 }

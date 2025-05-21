@@ -70,7 +70,7 @@ class _QualificationsnewPrevState extends State<QualificationsnewPrev> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  controller.editingIndex.value = index;
+                                  controller.editingIndexQualification.value = index;
                                   Get.toNamed(AppRoutes.QUALIFICATION_NEW);
                                 },
                                 child: Padding(
@@ -85,10 +85,10 @@ class _QualificationsnewPrevState extends State<QualificationsnewPrev> {
                               GestureDetector(
                                 onTap: () {
                                   controller.deleteQualification(index);
-                                  if (controller.editingIndex.value != null &&
-                                      controller.editingIndex.value! >=
+                                  if (controller.editingIndexQualification.value != null &&
+                                      controller.editingIndexQualification.value! >=
                                           controller.qualifications.length) {
-                                    controller.editingIndex.value = null;
+                                    controller.editingIndexQualification.value = null;
                                   }
                                 },
                                 child: Padding(
@@ -111,7 +111,7 @@ class _QualificationsnewPrevState extends State<QualificationsnewPrev> {
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                  controller.editingIndex.value = null;
+                  controller.editingIndexQualification.value = null;
                   Get.toNamed(AppRoutes.QUALIFICATION_NEW);
                 },
                 child: Row(
